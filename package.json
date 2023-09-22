@@ -1,0 +1,16 @@
+{
+  "name": "super_banking",
+  "packageManager": "yarn@3.6.1",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js asd 123"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.10",
+    "fast-xml-parser": "^4.3.0",
+    "iconv-lite": "^0.6.3",
+    "node-fetch": "^3.3.2"
+  }
+}
