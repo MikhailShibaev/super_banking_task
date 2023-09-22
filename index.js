@@ -77,5 +77,5 @@ const getNewBics = async () => {
 }
 
 getNewBics()
-  .then(bics => console.log(bics))
+  .then(bics => bics)
   .catch(err => console.log(err));
