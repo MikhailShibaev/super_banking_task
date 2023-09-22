@@ -6,6 +6,7 @@ import iconv from 'iconv-lite';
 const PARTIAL_NAME = 'ED807';
 const BIC_DIRECTORY = 'BICDirectoryEntry';
 const ALWAYS_ARRAY = [`${PARTIAL_NAME}.${BIC_DIRECTORY}.Accounts`];
+const ATTRIBUTE_PREFIX = 'attr';
 
 const getFile = async () => {
   const response = await fetch('http://www.cbr.ru/s/newbik');
@@ -38,15 +39,15 @@ const prepareData = (rawBic) => {
       return;
     }
 
-    const decodedName = iconv.decode(bicEntry.ParticipantInfo.attrNameP, 'windows-1251');
+    const decodedName = iconv.decode(bicEntry.ParticipantInfo[`${ATTRIBUTE_PREFIX}NameP`], 'windows-1251');
     const name = iconv.encode(decodedName, 'utf8').toString();
-    const bic = bicEntry.attrBIC;
+    const bic = bicEntry[`${ATTRIBUTE_PREFIX}BIC`];
 
     return bicEntry.Accounts.map(bicAccount => {
       return {
         bic,
         name,
-        account: bicAccount.attrAccount,
+        account: bicAccount[`${ATTRIBUTE_PREFIX}Account`],
       }
     });
   }).flat().filter(account => account);
@@ -65,7 +66,7 @@ const getNewBics = async () => {
 
   const xmlParser = new XMLParser({
     ignoreAttributes: false,
-    attributeNamePrefix: 'attr',
+    attributeNamePrefix: ATTRIBUTE_PREFIX,
     isArray: (name, jpath) => {
       if(ALWAYS_ARRAY.indexOf(jpath) !== -1) return true;
     }
